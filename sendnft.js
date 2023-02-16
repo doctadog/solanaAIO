@@ -1,6 +1,8 @@
+require("dotenv").config();
+
 const web3 = require("@solana/web3.js");
 const splToken = require("@solana/spl-token");
-const rpcURL = "https://special-falling-leaf.solana-mainnet.discover.quiknode.pro/ff8f81b01ecd3383abf30814bc37ef40792838d7/";
+const rpcURL = process.env.RPC_TWO;
 
 // This transaction is sending the tokens
 var transaction = new web3.Transaction().add(
