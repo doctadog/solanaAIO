@@ -1,18 +1,9 @@
 /* eslint-disable vars-on-top */
 require("dotenv").config();
-
+const fs = require("fs");
 const web3 = require("@solana/web3.js");
 const splToken = require("@solana/spl-token");
 const metaplex = require("@metaplex-foundation/js");
-const fs = require("fs");
-
-const connection = new web3.Connection(testnetUrl);
-
-const privateKeyFile = require("../Keypair.json");
-const tempArraySecret = Object.values(privateKeyFile);
-const secret = Uint8Array.from(tempArraySecret);
-const senderKeypair = web3.Keypair.fromSecretKey(secret);
-
 const axios = require("axios");
 const heliosApiKey = process.env.HELIOS_API_KEY
 

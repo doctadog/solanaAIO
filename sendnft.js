@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const web3 = require("@solana/web3.js");
 const splToken = require("@solana/spl-token");
-const rpcURL = process.env.RPC_TWO;
+const connection = new web3.Connection(process.env.RPC_TWO, "confirmed");
 
 // This transaction is sending the tokens
 var transaction = new web3.Transaction().add(

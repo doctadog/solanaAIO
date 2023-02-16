@@ -2,11 +2,6 @@ const web3 = require("@solana/web3.js");
 const splToken = require("@solana/spl-token");
 
 const connection = new web3.Connection("https://api.devnet.solana.com", "confirmed");
-const keypairFile = require("../Keypair.json");
-const tempArraySecret = Object.values(keypairFile);
-const privateKey = Uint8Array.from(tempArraySecret);
-
-const keypair = web3.Keypair.fromSecretKey(privateKey);
 
 const address = "4cBNGwzTgzGRqPsj3FCKxyH2kbkWwWD54zYvhkaixHdT";
 const publicKey = new web3.PublicKey(address);

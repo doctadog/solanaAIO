@@ -19,12 +19,10 @@ const Base58 = require("bs58");
 (async () => {
     const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
     const metaplex = new Metaplex(connection);
+
     const privateKeyString = process.env.PRIVATE_KEY;
-
     const decodedString = Base58.decode(privateKeyString);
-
     const privateKey = Uint8Array.from(decodedString);
-
     const senderKeypair = Keypair.fromSecretKey(privateKey);
 
     metaplex.use(keypairIdentity(senderKeypair));

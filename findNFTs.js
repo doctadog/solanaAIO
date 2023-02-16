@@ -3,7 +3,6 @@ const { PublicKey } = require("@solana/web3.js");
 const { Metaplex } = require("@metaplex-foundation/js");
 const { Connection } = require("@solana/web3.js");
 
-
 const creatorAddress = "CDd3LcqtBQ7JkGfnypLHdBpAiwFqqHS3xZaEFMKpdY9C";
 
 (async () => {
