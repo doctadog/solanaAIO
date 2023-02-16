@@ -1,26 +1,29 @@
-const {
-    Connection, Account, Transaction, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
-} = require("@solana/web3.js");
-const mainnetUrl = "https://mainnet-beta.solana.com";
-const testnetUrl = "https://api.testnet.solana.com";
-const devnetUrl = "https://api.devnet.solana.com";
-
+require("dotenv").config();
 const bs58 = require("bs58");
 
-const connection = new Connection(devnetUrl);
+const {
+    Connection, 
+    Account, 
+    Transaction, 
+    Keypair, 
+    LAMPORTS_PER_SOL, 
+    PublicKey, 
+    SystemProgram,
+} = require("@solana/web3.js");
 
-const privateKey = Uint8Array.from([
-    10,  33, 197, 179, 245, 164, 158,   0, 138,  51,  49,
-    32, 227, 219,  15,  26, 176,  15, 239, 252, 229, 196,
-    217, 180, 212,   1,  45,  35, 238, 126,  26, 180,   5,
-    63,  43, 126, 234, 246,  41,  66, 110, 117, 231,  99,
-    153,  91, 116, 224,  12,  52, 149, 201, 100, 122,  79,
-    28, 175,  30,  69,  40,  94,  87, 226, 254,
-]);
+const connection = new Connection(process.env.DEVNET);
+
+const privateKeyString = process.env.PRIVATE_KEY;
+
+const decodedString = bs58.decode(privateKeyString);
+
+const privateKey = Uint8Array.from(decodedString);
+
+const senderKeypair = Keypair.fromSecretKey(privateKey);
 
 const recieverPublicKey = new PublicKey("8fzQgCBjfrPA1ZtD76WgU96dHUnE8KLaVs1iWbXoGQih");
 
-const senderKeypair = Keypair.fromSecretKey(privateKey);
+console.log(senderKeypair.publicKey);
 
 const senderPrivateKeyEncoded = bs58.encode(privateKey);
 

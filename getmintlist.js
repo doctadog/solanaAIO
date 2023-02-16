@@ -6,10 +6,6 @@ const splToken = require("@solana/spl-token");
 const metaplex = require("@metaplex-foundation/js");
 const fs = require("fs");
 
-const devnetUrl = "https://api.devnet.solana.com";
-const mainnet = "https://mainnet-beta.solana.com";
-const testnetUrl = "https://api.testnet.solana.com";
-
 const connection = new web3.Connection(testnetUrl);
 
 const privateKeyFile = require("../Keypair.json");
@@ -18,7 +14,7 @@ const secret = Uint8Array.from(tempArraySecret);
 const senderKeypair = web3.Keypair.fromSecretKey(secret);
 
 const axios = require("axios");
-const heliosApiKey = "acad13ab-ae2f-4446-8984-2d88153d1f17";
+const heliosApiKey = process.env.HELIOS_API_KEY
 
 const creator = "3v6SQ2s8w5TYYzXeS5QLn2AD3sfwQLsg9HM3W2t2QDqE";
 const collectionName = "Rooniverse";

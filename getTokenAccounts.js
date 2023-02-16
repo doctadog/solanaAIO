@@ -1,7 +1,7 @@
 const web3 = require("@solana/web3.js");
 const splToken = require("@solana/spl-token");
 
-const connection = new web3.Connection("https://special-falling-leaf.solana-mainnet.discover.quiknode.pro/ff8f81b01ecd3383abf30814bc37ef40792838d7/");
+const connection = new web3.Connection("https://api.devnet.solana.com", "confirmed");
 const keypairFile = require("../Keypair.json");
 const tempArraySecret = Object.values(keypairFile);
 const privateKey = Uint8Array.from(tempArraySecret);

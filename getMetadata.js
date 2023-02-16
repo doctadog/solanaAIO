@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const {
     Connection,
     PublicKey,
@@ -17,7 +19,7 @@ const Base58 = require("bs58");
 (async () => {
     const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
     const metaplex = new Metaplex(connection);
-    const privateKeyString = "4s21YmzukEWDSPm6TKkhqTft4UJEY5g14YJLUBGcib81Pw3e1SNm2VPHiTeCaKNCsixL6s4xPpsrc8wcj51x57yF";
+    const privateKeyString = process.env.PRIVATE_KEY;
 
     const decodedString = Base58.decode(privateKeyString);
 

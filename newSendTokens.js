@@ -8,27 +8,9 @@ const splToken = require("@solana/spl-token");
 const fs = require("fs");
 const Base58 = require("bs58");
 
-const rpcUrl = "https://special-falling-leaf.solana-mainnet.discover.quiknode.pro/ff8f81b01ecd3383abf30814bc37ef40792838d7/";
-
-const testnet = "https://api.testnet.solana.com";
-
-const rpcTwo = "https://patient-billowing-moon.solana-mainnet.quiknode.pro/826c360201e137f0f078c807e8d8743a07831870/";
-
-const mainnet = "https://api.mainnet-beta.solana.com";
-
-const devnet = "https://api.devnet.solana.com";
-
-const alchemy = "https://solana-mainnet.g.alchemy.com/v2/iQcYGk4Un9DIT-rH9BIRQ4dHx03z4JcB";
-
 // testnet
 
-const connection = new web3.Connection(rpcUrl, "confirmed");
-const connectionTwo = new web3.Connection(rpcTwo, "confirmed");
-const connectionThree = new web3.Connection(alchemy, "confirmed");
-const connectionFour = new web3.Connection(mainnet, "confirmed");
-const connectionFive = new web3.Connection(testnet, "confirmed");
-const connectionSix = new web3.Connection(devnet, "confirmed");
-const connectionArray = [ connection, connectionTwo, connectionThree, connectionFour, connectionFive ];
+const connection = new web3.Connection(process.env.RPC_TWO, "confirmed");
 
 const updogMintAddress = "41sVEwZqcnhU4Z8H7n7mJDzRBw9L2HoedkGWTcVrKLM3";
 const tokenMintAddress = "41sVEwZqcnhU4Z8H7n7mJDzRBw9L2HoedkGWTcVrKLM3";
@@ -37,7 +19,7 @@ const TokenAddress = new web3.PublicKey(tokenMintAddress);
 
 const amount = 1;
 
-const privateKeyString = "4s21YmzukEWDSPm6TKkhqTft4UJEY5g14YJLUBGcib81Pw3e1SNm2VPHiTeCaKNCsixL6s4xPpsrc8wcj51x57yF";
+const privateKeyString = process.env.PRIVATE_KEY;
 
 const decodedString = Base58.decode(privateKeyString);
 
