@@ -17,7 +17,7 @@ const decodedString = bs58.decode(privateKeyString);
 const privateKey = Uint8Array.from(decodedString);
 const senderKeypair = Keypair.fromSecretKey(privateKey);
 
-const receiverPublicKey = new PublicKey(
+const recieverPublicKey = new PublicKey(
     "8fzQgCBjfrPA1ZtD76WgU96dHUnE8KLaVs1iWbXoGQih",
 );
 
@@ -58,7 +58,7 @@ async function sendSol() {
 
         SystemProgram.transfer({
             fromPubkey: senderKeypair2.publicKey,
-            toPubkey: receiver,
+            toPubkey: recieverPublicKey,
             lamports: Number(LAMPORTS_PER_SOL),
         }),
     );
