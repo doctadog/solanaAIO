@@ -16,7 +16,7 @@ async function getHolders(accounts, type) {
 
     if (type === "txt") {
         holderArray.forEach((holder, i) => {
-            fs.appendFileSync("holderArray.txt", `${holder}\n`, (err) => {
+            fs.appendFileSync("outputs/holderArray.txt", `${holder}\n`, (err) => {
                 if (err) {
                     console.error(err);
 
@@ -27,7 +27,7 @@ async function getHolders(accounts, type) {
             });
         });
     } else if (type === "json") {
-        fs.writeFile("holderArray.json", JSON.stringify(holderArray), (err) => {
+        fs.writeFile("outputs/holderArray.json", JSON.stringify(holderArray), (err) => {
             if (err) {
                 console.error(err);
 
@@ -71,4 +71,5 @@ async function getHolders(accounts, type) {
     );
     console.log(accounts);
     await getHolders(accounts, "txt");
+    await getHolders(accounts, "json");
 })();
