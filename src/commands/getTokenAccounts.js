@@ -1,48 +1,74 @@
+/* eslint-disable max-len */
+require("dotenv").config();
+const fs = require("fs");
 const web3 = require("@solana/web3.js");
 const splToken = require("@solana/spl-token");
 
-const connection = new web3.Connection("https://api.devnet.solana.com", "confirmed");
+const MY_TOKEN_MINT_ADDRESS = "HezGWsxSVMqEZy7HJf7TtXzQRLiDruYsheYWqoUVnWQo";
+const connection = new web3.Connection(process.env.RPC_TWO, "confirmed");
+const holderArray = [];
 
-const address = "4cBNGwzTgzGRqPsj3FCKxyH2kbkWwWD54zYvhkaixHdT";
-const publicKey = new web3.PublicKey(address);
+// Get all holders of a token
+async function getHolders(accounts, type) {
+    accounts.forEach((account, i) => {
+        holderArray.push(account.pubkey.toString());
+    });
 
+    if (type === "txt") {
+        holderArray.forEach((holder, i) => {
+            fs.appendFileSync("holderArray.txt", `${holder}\n`, (err) => {
+                if (err) {
+                    console.error(err);
+
+                    return;
+                }
+
+                console.log("File has been created");
+            });
+        });
+    } else if (type === "json") {
+        fs.writeFile("holderArray.json", JSON.stringify(holderArray), (err) => {
+            if (err) {
+                console.error(err);
+
+                return;
+            }
+
+            console.log("File has been created");
+        });
+    }
+}
+
+// Get all token accounts for a token mint
 (async () => {
-    const accounts = await connection.getParsedProgramAccounts(
+    console.log("Getting token accounts for mint", MY_TOKEN_MINT_ADDRESS);
+    const accounts = await connection.getProgramAccounts(
         splToken.TOKEN_PROGRAM_ID,
         {
-            filters : [
+            dataSlice:
+            {
+                offset: 0,
+                length: 0,
+            },
+            filters: [
                 {
-                    dataSize : 165,
+                    dataSize: 165,
                 },
                 {
-                    memcmp : {
-                        offset : 32,
-                        bytes  : publicKey,
+                    memcmp: {
+                        // Offset 32 : Authority Account information
+                        // Offset 0 : All Mint Accounts Information
+                        offset: 0,
+                        bytes: MY_TOKEN_MINT_ADDRESS,
                     },
                 },
             ],
-        }
+        },
     );
 
     console.log(
-        `Found ${accounts.length} token account(s) for wallet ${publicKey}: \n`
+        `Found ${accounts.length} token account(s) for mint ${MY_TOKEN_MINT_ADDRESS}`,
     );
-    accounts.forEach((account, i) => {
-        console.log(
-            `-- Token Account Address ${i + 1}: ${account.pubkey.toString()} --`
-        );
-        console.log(
-            `Mint: ${account.account.data["parsed"]["info"]["mint"]}`
-        );
-        console.log(
-            `Amount: ${account.account.data["parsed"]["info"]["tokenAmount"]["uiAmount"]}`
-        );
-        console.log(
-            `Token Info: ${JSON.stringify(account.account.data)}\n\n`
-        );
-    });
+    console.log(accounts);
+    await getHolders(accounts, "txt");
 })();
-
-// if ${account.account.data["parsed"]["info"]["tokenAmount"]["uiAmount"] === 0 {
-//     console.log("This account is an nft")
-// };

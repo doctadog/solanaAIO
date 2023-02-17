@@ -1,27 +1,34 @@
-const {
-    Connection,
-    PublicKey,
-    SystemProgram,
-    Transaction,
-    TransactionInstruction,
-    Keypair } =
-    require("@solana/web3.js");
+require("dotenv").config();
+const fs = require("fs");
+const http = require("http");
+const express = require("express");
+const path = require("path");
+const app = express();
 
-const { 
-    Metaplex, 
-    keypairIdentity } =
-    require("@metaplex-foundation/js");
+app.use(express.json());
+app.use(express.static("express"));
+// default URL for website
+app.use("/", function(req, res) {
+    res.sendFile(path.join(__dirname+"../../index.html"));
+    // __dirname : It will resolve to your project folder.
+});
+const server = http.createServer(app);
+const port = 3000;
 
-const Base58 = require("bs58");
+server.listen(port);
+console.debug("Server listening on port " + port);
 
+const functionFolder = fs.readdirSync("./src/functions");
 
-
-const functionFolder = fs.readdirSync('./src/functions'); 
-for (const folder of functionFolder) { 
+for (const folder of functionFolder) {
     const functionFiles = fs
         .readdirSync(`./src/functions/${folder}`)
-        .filter((file) => file.endsWith('.js')
-    );
-    for (const file of functionFiles)
-        require(`./functions/${folder}/${file}`)(client);
-};
+        .filter((file) => file.endsWith(".js"),
+        );
+
+    for (const file of functionFiles) {
+        require(`./functions/${folder}/${file}`); // (client);
+    }
+}
+
+;

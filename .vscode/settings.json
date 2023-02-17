@@ -4,7 +4,8 @@
       "javascript",
       "javascriptreact",
       "html",
-      "svelte", 
+      "svelte",
+      "css",
     ],
     "editor.codeActionsOnSave": {
           "source.fixAll.stylelint": true,
