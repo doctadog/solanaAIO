@@ -2,12 +2,11 @@ require("dotenv").config();
 const bs58 = require("bs58");
 
 const {
-    Connection, 
-    Account, 
-    Transaction, 
-    Keypair, 
-    LAMPORTS_PER_SOL, 
-    PublicKey, 
+    Connection,
+    Transaction,
+    Keypair,
+    LAMPORTS_PER_SOL,
+    PublicKey,
     SystemProgram,
 } = require("@solana/web3.js");
 
@@ -18,27 +17,31 @@ const decodedString = bs58.decode(privateKeyString);
 const privateKey = Uint8Array.from(decodedString);
 const senderKeypair = Keypair.fromSecretKey(privateKey);
 
-const recieverPublicKey = new PublicKey("8fzQgCBjfrPA1ZtD76WgU96dHUnE8KLaVs1iWbXoGQih");
+const receiverPublicKey = new PublicKey(
+    "8fzQgCBjfrPA1ZtD76WgU96dHUnE8KLaVs1iWbXoGQih",
+);
 
 console.log(senderKeypair.publicKey);
 
 const senderPrivateKeyEncoded = bs58.encode(privateKey);
 
-const senderKeypair2 = Keypair.fromSecretKey(bs58.decode(senderPrivateKeyEncoded));
+const senderKeypair2 = Keypair.fromSecretKey(
+    bs58.decode(senderPrivateKeyEncoded,
+    ));
 
 async function checkBalance(keypair) {
     const feePayer = Keypair.fromSecretKey(
-        bs58.decode(senderPrivateKeyEncoded)
+        bs58.decode(senderPrivateKeyEncoded),
     );
 
     const balance = await connection.getBalance(feePayer.publicKey);
 
     console.log(`Balance : ${balance / LAMPORTS_PER_SOL}`);
 
-    if((balance / LAMPORTS_PER_SOL) < 2) {
+    if ((balance / LAMPORTS_PER_SOL) < 2) {
         await airdrop();
     }
-    
+
     return balance;
 }
 
@@ -54,15 +57,15 @@ async function sendSol() {
     const tx = new Transaction().add(
 
         SystemProgram.transfer({
-            fromPubkey : senderKeypair2.publicKey,
-            toPubkey   : recieverPublicKey,
-            lamports   : Number(LAMPORTS_PER_SOL),
-        })
+            fromPubkey: senderKeypair2.publicKey,
+            toPubkey: receiver,
+            lamports: Number(LAMPORTS_PER_SOL),
+        }),
     );
 
     tx.feePayer = senderKeypair.publicKey;
 
-    const txHash = await connection.sendTransaction(tx, [ senderKeypair ]);
+    const txHash = await connection.sendTransaction(tx, [senderKeypair]);
 
     return txHash;
 }
