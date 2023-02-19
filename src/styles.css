@@ -1,0 +1,12 @@
+h1, h2, h3 {
+    outline-style: solid;
+    outline-color: rgb(135, 171, 250);
+    outline-width: 2px;
+
+}
+div {
+    background-color: #EAF0F6;
+    color: #33475B;
+    border: 3px solid #00A4BD;
+    padding: 5px;
+  }
