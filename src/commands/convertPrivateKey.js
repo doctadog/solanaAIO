@@ -21,11 +21,13 @@ async function convertArray() {
     return keypair;
 }
 
-fs.writeFile("privatekey.txt", privateKey, (err) => {
-    if (err) {
-        throw err;
-    }
-});
+async function writeToFile() {
+    fs.writeFile("privatekey.txt", privateKey, (err) => {
+        if (err) {
+            throw err;
+        }
+    });
+}
 
 module.exports = {
     convertString,
