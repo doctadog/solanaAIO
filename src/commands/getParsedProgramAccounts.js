@@ -1,16 +1,16 @@
 /* eslint-disable max-len */
 
 // Get all token accounts for a wallet
+
+// WORKS AS EXPORTED - Pass in Publickey as string
+require("dotenv").config();
 const fs = require("fs");
 const web3 = require("@solana/web3.js");
 const splToken = require("@solana/spl-token");
 
-const connection = new web3.Connection("https://api.devnet.solana.com", "confirmed");
+const connection = new web3.Connection(process.env.RPC_TWO);
 
-const Address = "4cBNGwzTgzGRqPsj3FCKxyH2kbkWwWD54zYvhkaixHdT";
-const publicKey = new web3.PublicKey(Address);
-
-(async () => {
+async function getParsedProgramAccounts(PublicKey) {
     const accounts = await connection.getParsedProgramAccounts(
         splToken.TOKEN_PROGRAM_ID,
         {
@@ -44,7 +44,10 @@ const publicKey = new web3.PublicKey(Address);
         console.log(
             `Token Info: ${JSON.stringify(account.account.data)}\n\n`,
         );
-
-        holderArray.append(account.account.data["parsed"]["info"]["mint"]);
     });
-})();
+}
+
+module.exports = {
+    getParsedProgramAccounts,
+
+};

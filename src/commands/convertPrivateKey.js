@@ -3,8 +3,7 @@ const fs = require("fs");
 const web3 = require("@solana/web3.js");
 const Base58 = require("bs58");
 
-async function convertString() {
-    const privateKeyString = process.env.PRIVATE_KEY;
+async function convertString(privateKeyString) {
     const decodedString = Base58.decode(privateKeyString);
     const privateKey = Uint8Array.from(decodedString);
     const keypair = web3.Keypair.fromSecretKey(privateKey);
@@ -12,9 +11,8 @@ async function convertString() {
     return keypair;
 }
 
-async function convertArray() {
-    const keypairFile = require("../Keypair.json");
-    const tempArraySecret = Object.values(keypairFile);
+async function convertArray(privateKeyArray) {
+    const tempArraySecret = Object.values(privateKeyArray);
     const privateArray = Uint8Array.from(tempArraySecret);
     const keypair = web3.Keypair.fromSecretKey(privateArray);
 
