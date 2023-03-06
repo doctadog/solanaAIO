@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable vars-on-top */
 /* eslint-disable max-statements */
 /* eslint-disable no-await-in-loop */
@@ -12,7 +13,6 @@ const Base58 = require("bs58");
 
 const connection = new web3.Connection(process.env.RPC_TWO, "confirmed");
 
-const updogMintAddress = "41sVEwZqcnhU4Z8H7n7mJDzRBw9L2HoedkGWTcVrKLM3";
 const tokenMintAddress = "41sVEwZqcnhU4Z8H7n7mJDzRBw9L2HoedkGWTcVrKLM3";
 
 const TokenAddress = new web3.PublicKey(tokenMintAddress);
@@ -40,7 +40,7 @@ async function transferToken(
     tokenAddress,
     recipientAddress,
     amt,
-    connectionCluster
+    connectionCluster,
 ) {
     console.log(`\nToken Address: ${tokenAddress}\nAmount: ${amount}\nRecipient Address: ${recipientAddress}, \nSender Public Key: ${senderKeypair.publicKey}\n\n`);
 
@@ -48,64 +48,52 @@ async function transferToken(
         connectionCluster,
         senderKeypair,
         TokenAddress,
-        recipientAddress
+        recipientAddress,
     );
     const addSenderToAcct = await splToken.getOrCreateAssociatedTokenAccount(
         connectionCluster,
         senderKeypair,
         TokenAddress,
-        senderKeypair.publicKey
+        senderKeypair.publicKey,
     );
-    const tranferToken = await splToken.transfer(
+    const transferToken = await splToken.transfer(
         connectionCluster,
         senderKeypair,
         addSenderToAcct.address,
         addRecipientToAcct.address,
         senderKeypair.publicKey,
-        amt * 100000 //5 decimals
+        amt * 100000, // 5 decimals
     );
 
     console.log("Done Transferring!");
-    
-    return tranferToken;
+
+    return transferToken;
 }
 
 async function tryTransfer(recipientAddress, address) {
-    for(var x in connectionArray) {
-        if(x === 6) {
-            console.log(`Try Catch Connections Failed for ${recipientAddress}`);
-            console.log("Create New file for each failed address");
-            address = `(sent) ${address}`;
-
-            fs.writeFileSync(`${fileName}_failed.txt,`, address.join("\n"));
-            console.log(`Now Resuming from ${address}`);
-            break;
-        }
-
-        try {
-            await transferToken(
-                TokenAddress,
-                recipientAddress,
-                amount,
-                connectionArray[x]
-            );
-        } catch(err) {
-            console.log("\n\n\nError: ");
-            console.log(err);
-            continue;
-        }
-
-        address = `(sent) ${address}`;
-        fs.writeFileSync(fileName, mintlist.join("\n"));
-        console.log(`[${address}] Airdropping ${tokenMintAddress} to ${recipientAddress} has been successful\n\n`);
-
-        return;
+    try {
+        await transferToken(
+            TokenAddress,
+            recipientAddress,
+            amount,
+            connection,
+        );
+    } catch (err) {
+        console.log("\n\n\nError: ");
+        console.log(err);
     }
+
+    address = `(sent) ${address}`;
+    fs.writeFileSync(fileName, mintlist.join("\n"));
+    console.log(`[${address}] Airdropping ${tokenMintAddress} to ${recipientAddress} has been successful\n\n`);
+
+    return;
 }
 
-(async () => {
-    for(var address in mintlist) {
-        if(mintlist[address].includes("(sent) ")) {
+async function airdrop() {
+    // eslint-disable-next-line guard-for-in
+    for (const address in mintlist) {
+        if (mintlist[address].includes("(sent) ")) {
             console.log(`[${address}] Skipping ${mintlist[address]} as has been processed before`);
             continue;
         }
@@ -118,12 +106,12 @@ async function tryTransfer(recipientAddress, address) {
         // fs.writeFileSync(fileName, mintlist.join("\n"));
         // console.log(`[${address}] Airdropping ${tokenMintAddress} to ${recipientAddress} has been successful\n\n`);
     }
-})();
+}
 
-// Error 429: Too Many Requests
-// SendTransactionError: failed to send transaction: Transaction simulation failed: Blockhash not found
-// Error 429: Too Many Requests
-// Blockhash not found
+airdrop();
 
-// Try Catch Connections
-// Create New file for each failed address
+module.exports = {
+    transferToken,
+    tryTransfer,
+    airdrop,
+};
